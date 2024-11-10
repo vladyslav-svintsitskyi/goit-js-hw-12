@@ -48,13 +48,6 @@ async function onSubmit(event) {
     } else {
       renderGallery(data.hits);
 
-      const galleryItems = gallery.children;
-      if (galleryItems.length > 0) {
-        const cardSizes =
-          galleryItems[galleryItems.length - 1].getBoundingClientRect();
-        scrollToNewImages(cardSizes);
-      }
-
       if (data.totalHits > perPage * pageNumber) {
         loadMore.style.display = 'block';
       } else {
@@ -88,6 +81,14 @@ async function onLoadMore() {
     const data = await serviceImage(tagValue, pageNumber, perPage);
     renderGallery(data.hits);
 
+    const card = document.querySelector('.gallery-item');
+    const cardHeight = card.getBoundingClientRect().height;
+    window.scrollBy({
+      left: 0,
+      top: cardHeight * 3.36,
+      behavior: 'smooth',
+    });
+
     if (data.totalHits > perPage * pageNumber) {
       loadMore.style.display = 'block';
     } else {
@@ -110,11 +111,4 @@ async function onLoadMore() {
   } finally {
     loader.style.display = 'none';
   }
-}
-
-function scrollToNewImages(cardSizes) {
-  window.scrollBy({
-    top: cardSizes.height * 2,
-    behavior: 'smooth',
-  });
 }
