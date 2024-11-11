@@ -20,7 +20,7 @@ async function onSubmit(event) {
   event.preventDefault();
   gallery.innerHTML = '';
 
-  const tagValue = event.currentTarget.elements.tag.value;
+  tagValue = event.currentTarget.elements.tag.value;
   if (tagValue.trim() === '') {
     iziToast.warning({
       title: 'Missing tags',
@@ -35,7 +35,7 @@ async function onSubmit(event) {
 
   try {
     const data = await serviceImage(tagValue, pageNumber, perPage);
-    console.log(data.hits);
+    console.log(data);
 
     if (data.hits.length === 0) {
       iziToast.error({
@@ -80,12 +80,18 @@ async function onLoadMore() {
   try {
     const data = await serviceImage(tagValue, pageNumber, perPage);
     renderGallery(data.hits);
+    console.log(gallery.lastElementChild);
 
-    const card = document.querySelector('.gallery-item');
-    const cardHeight = card.getBoundingClientRect().height;
+    // const card = document.querySelector('.gallery-item');
+    // const cardHeight = card.getBoundingClientRect().height;
+    // window.scrollBy({
+    //   left: 0,
+    //   top: cardHeight * 3.36,
+    //   behavior: 'smooth',
+    // });
+    const cardSize = gallery.lastElementChild.getBoundingClientRect();
     window.scrollBy({
-      left: 0,
-      top: cardHeight * 3.36,
+      top: cardSize.top + cardSize.height * 1.5,
       behavior: 'smooth',
     });
 
